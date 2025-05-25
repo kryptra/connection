@@ -1,14 +1,6 @@
 {
   "name": "connection",
   "tree": {
-    "$className": "DataModel",
-
-    "ReplicatedStorage": {
-      "$className": "ReplicatedStorage",
-
-      "connection": {
-        "$path": "src"
-      }
-    }
+    "$path": "src"
   }
 }

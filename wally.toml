@@ -1,5 +1,5 @@
 [package]
-name = "crvst/connection"
+name = "kryptra/connection"
 version = "1.0.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
