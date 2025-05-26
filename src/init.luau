@@ -1,16 +1,7 @@
 --// Connection
 
 local ConnectionPrototype = {}
-local ConnectionMetatable = {
-	__index = ConnectionPrototype,
-	__call = function(self: ConnectionType, ...: any): ...any
-		if not self._callback or self._callback and type(self._callback) ~= "function" then
-			return
-		end
-
-		return self._callback(...)
-	end,
-}
+local ConnectionMetatable = { __index = ConnectionPrototype }
 
 --// Public
 
@@ -22,10 +13,10 @@ export type ConnectionType = typeof(setmetatable(
 	ConnectionMetatable
 ))
 
-function ConnectionPrototype.Disconnect(self: ConnectionType)
+function ConnectionPrototype.disconnect(self: ConnectionType)
 	for _: number, tbl: { [any]: ConnectionType } in pairs(self._references) do
 		for index: any, value: ConnectionType in pairs(tbl) do
-			if not self:__is(value) or value ~= self then
+			if not self:is(value) or value ~= self then
 				continue
 			end
 
@@ -43,7 +34,15 @@ function ConnectionPrototype.Disconnect(self: ConnectionType)
 	table.freeze(self :: any)
 end
 
-function ConnectionPrototype.__is(_: ConnectionType, object: any): boolean
+function ConnectionPrototype.call(self: ConnectionType, ...: any): ...any
+	if not self or not self._callback then
+		return
+	end
+
+	return self._callback(...)
+end
+
+function ConnectionPrototype.is(_: ConnectionType, object: any): boolean
 	if type(object) == "table" then
 		return getmetatable(object) == ConnectionMetatable
 	end
