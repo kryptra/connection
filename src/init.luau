@@ -57,10 +57,28 @@ local function new(callback: (...any) -> ...any, ...: { [any]: any }): Connectio
 	}, ConnectionMetatable)
 end
 
+local function wrap(signal: RBXScriptSignal, callback: (...any) -> ...any, ...: { [any]: any })
+	local wrapped_connection = new(callback, ...)
+
+	local connection_ref = signal:Connect(function(...: any)
+		wrapped_connection:call(...)
+	end)
+
+	function wrapped_connection.disconnect(self: ConnectionType)
+		connection_ref:Disconnect()
+		connection_ref = nil
+
+		self:disconnect()
+	end
+
+	return wrapped_connection
+end
+
 --// Export
 
 return table.freeze({
 	new = new,
+	wrap = wrap,
 
 	is = ConnectionPrototype.is,
 })
