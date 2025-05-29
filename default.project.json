@@ -1,6 +1,6 @@
 {
-  "name": "connection",
-  "tree": {
-    "$path": "src"
-  }
+	"name": "connection",
+	"tree": {
+		"$path": "src"
+	}
 }
