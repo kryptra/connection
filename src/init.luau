@@ -50,14 +50,6 @@ function ConnectionPrototype.call(self: ConnectionType, ...: any): ...any
 	return self._callback(...)
 end
 
-function ConnectionPrototype.is(object: any): boolean
-	if type(object) == "table" then
-		return getmetatable(object) == ConnectionMetatable
-	end
-
-	return false
-end
-
 local function new(callback: (...any) -> ...any, ...: { [any]: any }): ConnectionType
 	return setmetatable({
 		_callback = callback,
@@ -75,11 +67,15 @@ local function wrap(signal: RBXScriptSignal, callback: (...any) -> ...any, ...: 
 	return wrapped_connection
 end
 
+local function is(object: any): boolean
+	return type(object) == "table" and getmetatable(object) == ConnectionMetatable
+end
+
 --// Export
 
 return table.freeze({
 	new = new,
 	wrap = wrap,
 
-	is = ConnectionPrototype.is,
+	is = is,
 })
